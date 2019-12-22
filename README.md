@@ -7,3 +7,7 @@ An implementation of a byte string which is an immutable rope-like sequence desi
 ```
 go get -v github.com/sinoz/bytecat
 ```
+
+## Examples
+
+There is a list of examples that you can consult [here](https://github.com/sinoz/bytecat/examples).
