@@ -10,4 +10,4 @@ go get -v github.com/sinoz/bytecat
 
 ## Examples
 
-There is a list of examples that you can consult [here](https://github.com/sinoz/bytecat/examples).
+There is a list of examples that you can consult [here](https://github.com/sinoz/bytecat/tree/master/examples).
