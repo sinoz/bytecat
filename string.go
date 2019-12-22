@@ -217,40 +217,6 @@ func (i *Iterator) ReadUInt64() (uint64, error) {
 	return uint64(v1)<<56 | uint64(v2)<<48 | uint64(v3)<<40 | uint64(v4)<<32 | uint64(v5)<<24 | uint64(v6)<<16 | uint64(v7)<<8 | uint64(v8), nil
 }
 
-// ReadCString reads a series of characters and outputs a string value.
-func (i *Iterator) ReadCString() (string, error) {
-	var bldr strings.Builder
-
-	for i.IsReadable() {
-		charByte, err := i.ReadByte()
-		if err != nil {
-			return "", err
-		}
-
-		if charByte == 0 {
-			break
-		}
-
-		bldr.WriteByte(charByte)
-	}
-
-	return bldr.String(), nil
-}
-
-// ReadDoubleEndedCString reads a series of characters and outputs a string value.
-func (i *Iterator) ReadDoubleEndedCString() (string, error) {
-	value, err := i.ReadByte()
-	if err != nil {
-		return "", err
-	}
-
-	if value != 0 {
-		return "", errors.New("expected null terminator value at the beginning of the sequence")
-	}
-
-	return i.ReadCString()
-}
-
 // ReadString reads a series of characters and outputs a string value.
 func (i *Iterator) ReadString(length int) (string, error) {
 	var bldr strings.Builder
@@ -419,19 +385,6 @@ func (b *Builder) WriteString(value string) *Builder {
 	}
 
 	return b
-}
-
-// WriteCString writes the given string value to the builder with a
-// terminator value of zero added to the byte sequence, for the other
-// side to acknowledge as the end of the sequence.
-func (b *Builder) WriteCString(value string) *Builder {
-	b.ensureWritable(len(value) + 1)
-
-	for _, character := range value {
-		b.WriteByte(byte(character))
-	}
-
-	return b.WriteByte(0)
 }
 
 // Build constructs a String out of the written bytes.
