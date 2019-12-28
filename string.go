@@ -293,7 +293,9 @@ func (i *Iterator) Read(p []byte) (n int, err error) {
 // buffer becomes too large, Write will panic with ErrTooLarge.
 func (b *Builder) Write(p []byte) (n int, err error) {
 	b.ensureWritable(len(p))
-	return copy(b.bytes[b.index:], p), nil
+	amtBytesWritten := copy(b.bytes[b.index:], p)
+	b.index += amtBytesWritten
+	return amtBytesWritten, nil
 }
 
 // capacity returns this builder's current capacity.

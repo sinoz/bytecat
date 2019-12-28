@@ -70,3 +70,15 @@ func TestByteBuilder_Growth(t *testing.T) {
 		t.Error("expected capacity to equal 256")
 	}
 }
+
+func TestByteBuilder_Write(t *testing.T) {
+	bb := NewDefaultBuilder()
+	bytes := []byte{1, 2, 3, 4, 5, 6, 7, 8}
+	if _, err := bb.Write(bytes); err != nil {
+		t.Error(err)
+	}
+
+	if bb.index != 8 {
+		t.Error("expected builder writer index to be at position 8")
+	}
+}
