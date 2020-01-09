@@ -242,6 +242,11 @@ func (i *Iterator) SkipBytes(amount int) {
 	}
 }
 
+// Index returns the current reader index within the iterator.
+func (i *Iterator) Index() int {
+	return i.index
+}
+
 // ReadableBytes returns the amount of bytes the iterator has left to read.
 func (i *Iterator) ReadableBytes() int {
 	return i.bytes.Length() - i.index
@@ -296,6 +301,11 @@ func (b *Builder) Write(p []byte) (n int, err error) {
 	amtBytesWritten := copy(b.bytes[b.index:], p)
 	b.index += amtBytesWritten
 	return amtBytesWritten, nil
+}
+
+// Index returns the current writer index within the builder.
+func (b *Builder) Index() int {
+	return b.index
 }
 
 // capacity returns this builder's current capacity.
