@@ -136,6 +136,12 @@ func (i *Iterator) ReadByte() (byte, error) {
 	return value, err
 }
 
+// GetByte reads a single byte at the current index. May return an error
+// if the index is out of bounds.
+func (i *Iterator) GetByte(index int) (byte, error) {
+	return i.bytes.ByteAt(index)
+}
+
 // ReadBool reads a single byte at the current index, advances the index
 // after reading it and returns it as a boolean value. May return an error
 // if the index is out of bounds.
@@ -340,6 +346,18 @@ func (b *Builder) WriteByte(value byte) *Builder {
 	b.index++
 
 	return b
+}
+
+// SetByte sets the specified byte value at the specified index within
+// the builder. May return an error if the given index is out of bounds.
+func (b *Builder) SetByte(index int, value byte) error {
+	if index < 0 || index >= len(b.bytes) {
+		return errors.New("index out of bounds")
+	}
+
+	b.bytes[index] = value
+
+	return nil
 }
 
 // WriteInt16 writes the given int16 value as a 16-bit integer to the builder.
