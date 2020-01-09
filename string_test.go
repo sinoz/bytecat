@@ -60,13 +60,13 @@ func TestByteBuilder_Growth(t *testing.T) {
 		bb.WriteByte(byte(i))
 	}
 
-	if bb.capacity() != 128 {
+	if bb.Capacity() != 128 {
 		t.Error("expected capacity to equal 128")
 	}
 
 	bb.WriteByte(byte(2))
 
-	if bb.capacity() != 256 {
+	if bb.Capacity() != 256 {
 		t.Error("expected capacity to equal 256")
 	}
 }

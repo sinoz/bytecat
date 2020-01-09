@@ -315,7 +315,7 @@ func (i *Iterator) Read(p []byte) (n int, err error) {
 // needed. The return value n is the length of p; err is always nil. If the
 // buffer becomes too large, Write will panic with ErrTooLarge.
 func (b *Builder) Write(p []byte) (n int, err error) {
-	b.ensureWritable(len(p))
+	b.EnsureWritable(len(p))
 	amtBytesWritten := copy(b.bytes[b.index:], p)
 	b.index += amtBytesWritten
 	return amtBytesWritten, nil
@@ -348,33 +348,33 @@ func (b *Builder) InspectAt(index int) (byte, error) {
 	return b.bytes[index], nil
 }
 
-// capacity returns this builder's current capacity.
-func (b *Builder) capacity() int {
+// Capacity returns this builder's current capacity.
+func (b *Builder) Capacity() int {
 	return len(b.bytes)
 }
 
-// isWritable returns whether a single byte can be written now to the builder.
-func (b *Builder) isWritable() bool {
-	return b.canWrite(1)
+// IsWritable returns whether a single byte can be written now to the builder.
+func (b *Builder) IsWritable() bool {
+	return b.CanWrite(1)
 }
 
-// canWrite returns whether the specified amount of bytes can be written
+// CanWrite returns whether the specified amount of bytes can be written
 // to this builder without the act of regrowth.
-func (b *Builder) canWrite(amount int) bool {
-	return (b.capacity() - b.index) >= amount
+func (b *Builder) CanWrite(amount int) bool {
+	return (b.Capacity() - b.index) >= amount
 }
 
-// ensureWritable ensures that the specified amount of bytes can be written.
-func (b *Builder) ensureWritable(amount int) {
-	for !b.canWrite(amount) {
-		trail := make([]byte, b.capacity())
+// EnsureWritable ensures that the specified amount of bytes can be written.
+func (b *Builder) EnsureWritable(amount int) {
+	for !b.CanWrite(amount) {
+		trail := make([]byte, b.Capacity())
 		b.bytes = append(b.bytes, trail...)
 	}
 }
 
 // WriteByte writes the given byte value as a single byte to the builder.
 func (b *Builder) WriteByte(value byte) *Builder {
-	b.ensureWritable(1)
+	b.EnsureWritable(1)
 
 	b.bytes[b.index] = value
 	b.index++
@@ -396,7 +396,7 @@ func (b *Builder) SetByte(index int, value byte) error {
 
 // WriteInt16 writes the given int16 value as a 16-bit integer to the builder.
 func (b *Builder) WriteInt16(value int16) *Builder {
-	b.ensureWritable(2)
+	b.EnsureWritable(2)
 
 	b.bytes[b.index] = byte(value >> 8)
 	b.bytes[b.index+1] = byte(value)
@@ -408,7 +408,7 @@ func (b *Builder) WriteInt16(value int16) *Builder {
 
 // WriteInt32 writes the given int32 value as a 32-bit integer to the builder.
 func (b *Builder) WriteInt32(value int32) *Builder {
-	b.ensureWritable(4)
+	b.EnsureWritable(4)
 
 	b.bytes[b.index] = byte(value >> 24)
 	b.bytes[b.index+1] = byte(value >> 16)
@@ -422,7 +422,7 @@ func (b *Builder) WriteInt32(value int32) *Builder {
 
 // WriteInt64 writes the given int64 value as a 64-bit integer to the builder.
 func (b *Builder) WriteInt64(value int64) *Builder {
-	b.ensureWritable(8)
+	b.EnsureWritable(8)
 
 	b.bytes[b.index] = byte(value >> 56)
 	b.bytes[b.index+1] = byte(value >> 48)
@@ -442,7 +442,7 @@ func (b *Builder) WriteInt64(value int64) *Builder {
 // sort of terminator value. It is up to the established user protocol to
 // determine what the actual length is.
 func (b *Builder) WriteString(value string) *Builder {
-	b.ensureWritable(len(value))
+	b.EnsureWritable(len(value))
 
 	for character := range value {
 		b.WriteByte(byte(character))
