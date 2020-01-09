@@ -110,7 +110,7 @@ func (s *String) Length() int {
 
 // ByteAt reads a byte value at the specified index.
 func (s *String) ByteAt(index int) (byte, error) {
-	if index > len(s.bytes) {
+	if index < 0 || index > len(s.bytes) {
 		return 0, errors.New("index out of bounds")
 	}
 
@@ -336,6 +336,16 @@ func (b *Builder) SetIndex(v int) {
 	} else {
 		b.index = v
 	}
+}
+
+// InspectAt gets a single byte at the current index. May return an error
+// if the index is out of bounds.
+func (b *Builder) InspectAt(index int) (byte, error) {
+	if index < 0 || index > len(b.bytes) {
+		return 0, errors.New("index out of bounds")
+	}
+
+	return b.bytes[index], nil
 }
 
 // capacity returns this builder's current capacity.
