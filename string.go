@@ -253,6 +253,18 @@ func (i *Iterator) Index() int {
 	return i.index
 }
 
+// SetIndex sets the current reader index to the specified value. The writer
+// index can never over-or underflow and will be adjusted accordingly.
+func (i *Iterator) SetIndex(v int) {
+	if v < 0 {
+		i.index = 0
+	} else if v >= i.bytes.Length() {
+		i.index = i.bytes.Length() - 1
+	} else {
+		i.index = v
+	}
+}
+
 // ReadableBytes returns the amount of bytes the iterator has left to read.
 func (i *Iterator) ReadableBytes() int {
 	return i.bytes.Length() - i.index
@@ -312,6 +324,18 @@ func (b *Builder) Write(p []byte) (n int, err error) {
 // Index returns the current writer index within the builder.
 func (b *Builder) Index() int {
 	return b.index
+}
+
+// SetIndex sets the current writer index to the specified value. The
+// writer index can never over-or underflow and will be adjusted accordingly.
+func (b *Builder) SetIndex(v int) {
+	if v < 0 {
+		b.index = 0
+	} else if v >= len(b.bytes) {
+		b.index = len(b.bytes) - 1
+	} else {
+		b.index = v
+	}
 }
 
 // capacity returns this builder's current capacity.
