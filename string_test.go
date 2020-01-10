@@ -4,6 +4,46 @@ import (
 	"testing"
 )
 
+func TestString_Append(t *testing.T) {
+	b := StringOf(1, 2, 3, 4, 5, 6, 7, 8)
+	b1 := b.Append(9, 10, 11, 12, 13, 14, 15)
+
+	if b1.Length() != 15 {
+		t.Error("expected byte string length after value appending to be 15")
+	}
+
+	for i := 1; i <= b1.Length(); i++ {
+		v, err := b1.ByteAt(i - 1)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if v != byte(i) {
+			t.Error("value mismatch")
+		}
+	}
+}
+
+func TestString_Prepend(t *testing.T) {
+	b := StringOf(9, 10, 11, 12, 13, 14, 15)
+	b1 := b.Prepend(1, 2, 3, 4, 5, 6, 7, 8)
+
+	if b1.Length() != 15 {
+		t.Error("expected byte string length after value prepending to be 15")
+	}
+
+	for i := 1; i <= b1.Length(); i++ {
+		v, err := b1.ByteAt(i - 1)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if v != byte(i) {
+			t.Error("value mismatch")
+		}
+	}
+}
+
 func TestString_Concat(t *testing.T) {
 	b1 := StringOf(1, 2, 3, 4, 5)
 	b2 := StringOf(6, 7, 8, 9, 10)

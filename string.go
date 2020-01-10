@@ -128,6 +128,18 @@ func (s *String) Iterator() *Iterator {
 	return &Iterator{bytes: s}
 }
 
+// Append appends the given series of bytes to the tail of the
+// String, resulting in a byte String.
+func (s *String) Append(values ...byte) *String {
+	return s.Concat(StringWrap(values))
+}
+
+// Prepend prepends the given series of bytes to the front of
+// the String, resulting in a new byte String.
+func (s *String) Prepend(values ...byte) *String {
+	return StringWrap(values).Concat(s)
+}
+
 // ReadByte reads a single byte at the current index and advances the index
 // after reading it. May return an error if the index is out of bounds.
 func (i *Iterator) ReadByte() (byte, error) {
