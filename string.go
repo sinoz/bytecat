@@ -265,16 +265,9 @@ func (i *Iterator) Index() int {
 	return i.index
 }
 
-// SetIndex sets the current reader index to the specified value. The writer
-// index can never over-or underflow and will be adjusted accordingly.
+// SetIndex sets the current reader index to the specified value.
 func (i *Iterator) SetIndex(v int) {
-	if v < 0 {
-		i.index = 0
-	} else if v >= i.bytes.Length() {
-		i.index = i.bytes.Length() - 1
-	} else {
-		i.index = v
-	}
+	i.index = v
 }
 
 // ReadableBytes returns the amount of bytes the iterator has left to read.
