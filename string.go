@@ -331,16 +331,9 @@ func (b *Builder) Index() int {
 	return b.index
 }
 
-// SetIndex sets the current writer index to the specified value. The
-// writer index can never over-or underflow and will be adjusted accordingly.
+// SetIndex sets the current writer index to the specified value.
 func (b *Builder) SetIndex(v int) {
-	if v < 0 {
-		b.index = 0
-	} else if v >= len(b.bytes) {
-		b.index = len(b.bytes) - 1
-	} else {
-		b.index = v
-	}
+	b.index = v
 }
 
 // InspectAt gets a single byte at the current index. May return an error
